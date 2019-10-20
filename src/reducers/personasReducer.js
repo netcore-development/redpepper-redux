@@ -27,7 +27,7 @@ export default function(state = initialState, action) {
     case AGREGAR_PERSONA_ERROR:
       return {
         ...state,
-        error: true
+        error: action.payload
       };
     default:
       return state;

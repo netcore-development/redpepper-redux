@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 
 // Redux
-import { crearNuevaPersonaAction } from './../actions/personasAction';
-import {useDispatch} from 'react-redux';
+import { crearNuevaPersonaAction } from "./../actions/personasAction";
+import { validarFormularioAction } from "./../actions/validacionAction";
+import { useDispatch } from "react-redux";
 
 // Reactstrap
 //reactstrap
@@ -22,45 +23,76 @@ import {
 import InputMask from "react-input-mask";
 
 const NuevaPersona = () => {
-    //State
-    const [nombres, guardarNombres] = useState('');
-    const [apellidos, guardarApellidos] = useState('');
-    const [sexo, guardarSexo] = useState('');
-    const [fechaNacimiento, guardarFechaNacimiento] = useState('');
-    const [dui, guardarDui] = useState('');
-    const [nit, guardarNit] = useState('');
-    const [direccion,guardarDireccion] = useState('');
-    const [telefono, guardarTelefono] = useState('');
-    const [correoElectronico, guardarCorreoElectronico] = useState('');
-    
-    const [modal, setModal] = useState(false);
+  //State
+  const [nombres, guardarNombres] = useState("");
+  const [apellidos, guardarApellidos] = useState("");
+  const [sexo, guardarSexo] = useState("");
+  const [fechaNacimiento, guardarFechaNacimiento] = useState("");
+  const [dui, guardarDui] = useState("");
+  const [nit, guardarNit] = useState("");
+  const [direccion, guardarDireccion] = useState("");
+  const [telefono, guardarTelefono] = useState("");
+  const [correoElectronico, guardarCorreoElectronico] = useState("");
 
-    const toggle = () => setModal(!modal);
+  const [modal, setModal] = useState(false);
 
+  const toggle = () => setModal(!modal);
 
-    
+  // Crear nueva persona
+  const dispatch = useDispatch();
+  const agregarPersona = persona => dispatch(crearNuevaPersonaAction(persona));
+  const validarFormulario = () => dispatch(validarFormularioAction());
 
-    // Crear nueva Persona
-    const submitNuevaPersona = e => {
-      e.preventDefault();
+  // Agregar nueva Persona
+  const submitNuevaPersona = e => {
+    e.preventDefault();
 
+    validarFormulario();
+
+    // Validar formulario
+    if (
+      nombres.trim() === "" ||
+      apellidos.trim() === "" ||
+      sexo.trim() === "" ||
+      fechaNacimiento.trim() === "" ||
+      dui.trim() === "" ||
+      nit.trim() === "" ||
+      direccion.trim() === "" ||
+      telefono.trim() === "" ||
+      correoElectronico.trim() === ""
+    ) {
+      return;
     }
-
+      // si pasa la validacion
+      agregarPersona({
+        nombres,
+        apellidos,
+        sexo,
+        fechaNacimiento,
+        dui,
+        nit,
+        direccion,
+        telefono,
+        correoElectronico
+      });
+  };
 
   return (
     <div>
-      
-      <Button className="btn btn-success d-block d-md-inline-block" onClick={toggle}>
+      <Button
+        className="btn btn-success d-block d-md-inline-block"
+        onClick={toggle}
+      >
         Agregar Persona &#43;
       </Button>
 
       <Modal
         isOpen={modal}
         toggle={toggle}
-        size="md"
+        size="lg"
         style={{ border: "0.5px solid black", borderRadius: "5px" }}
       >
-        <Form >
+        <Form onSubmit={submitNuevaPersona}>
           <ModalHeader toggle={toggle}>Registro Personas</ModalHeader>
           <ModalBody>
             <FormGroup row>
@@ -72,9 +104,10 @@ const NuevaPersona = () => {
                 <Input
                   type="text"
                   name="nombres"
-                  id="personName"
+                  id="personaNombres"
                   placeholder="Ingrese nombre de la persona"
-                  // onChange={handleChange}
+                  value={nombres}
+                  onChange={e => guardarNombres(e.target.value)}
                 />
               </Col>
               <Col lg={1} />
@@ -89,9 +122,10 @@ const NuevaPersona = () => {
                 <Input
                   type="text"
                   name="apellidos"
-                  id="personLastName"
+                  id="personaApellidos"
                   placeholder="Ingrese apellidos de la persona"
-                  // onChange={handleChange}
+                  value={apellidos}
+                  onChange={e => guardarApellidos(e.target.value)}
                 />
               </Col>
               <Col lg={1} />
@@ -106,8 +140,9 @@ const NuevaPersona = () => {
                 <Input
                   type="select"
                   name="sexo"
-                  id="selectSex"
-                  // onChange={handleChange}
+                  id="personaSexo"
+                  value={sexo}
+                  onChange={e => guardarSexo(e.target.value)}
                 >
                   <option value="" selected disabled hidden>
                     -- Seleccione una opción --
@@ -127,8 +162,9 @@ const NuevaPersona = () => {
                 <Input
                   type="date"
                   name="fechaNacimiento"
-                  id="personBirthDate"
-                  // onChange={handleChange}
+                  id="personaFechaNacimiento"
+                  value={fechaNacimiento}
+                  onChange={e => guardarFechaNacimiento(e.target.value)}
                 />
               </Col>
               <Col lg={1} />
@@ -142,11 +178,12 @@ const NuevaPersona = () => {
                 <Input
                   type="text"
                   name="dui"
-                  id="personDUI"
+                  id="personaDUI"
                   placeholder="Ingrese el DUI de la persona"
                   mask="99999999-9"
                   tag={InputMask}
-                  // onChange={handleChange}
+                  value={dui}
+                  onChange={e => guardarDui(e.target.value)}
                 />
               </Col>
               <Col lg={1} />
@@ -160,11 +197,12 @@ const NuevaPersona = () => {
                 <Input
                   type="text"
                   name="nit"
-                  id="personNIT"
+                  id="personaNIT"
                   placeholder="Ingrese el NIT de la persona"
                   mask="9999-999999-999-9"
                   tag={InputMask}
-                  // onChange={handleChange}
+                  value={nit}
+                  onChange={e => guardarNit(e.target.value)}
                 />
               </Col>
               <Col lg={1} />
@@ -178,8 +216,9 @@ const NuevaPersona = () => {
                 <Input
                   type="textarea"
                   name="direccion"
-                  id="personDireccion"
-                  // onChange={handleChange}
+                  id="personaDireccion"
+                  value={direccion}
+                  onChange={e => guardarDireccion(e.target.value)}
                 />
               </Col>
               <Col lg={1} />
@@ -193,11 +232,12 @@ const NuevaPersona = () => {
                 <Input
                   type="tel"
                   name="telefono"
-                  id="personTel"
+                  id="personaTelefono"
                   mask="9999-9999"
                   tag={InputMask}
+                  value={telefono}
                   placeholder="Ingrese el teléfono de la persona"
-                  // onChange={handleChange}
+                  onChange={e => guardarTelefono(e.target.value)}
                 />
               </Col>
               <Col lg={1} />
@@ -215,9 +255,10 @@ const NuevaPersona = () => {
                 <Input
                   type="email"
                   name="correoElectronico"
-                  id="personEmail"
+                  id="personaEmail"
                   placeholder="Ingrese el correo electrónico de la persona"
-                  // onChange={handleChange}
+                  value={correoElectronico}
+                  onChange={e => guardarCorreoElectronico(e.target.value)}
                 />
                 <Col lg={1} />
               </Col>
@@ -230,7 +271,8 @@ const NuevaPersona = () => {
             <input
               type="submit"
               className="btn btn-primary btn-md"
-              value="Agregar" onClick={toggle}
+              value="Agregar"
+              onClick={toggle}
             />{" "}
             <Button color="secondary" onClick={toggle}>
               Cancelar
@@ -240,7 +282,6 @@ const NuevaPersona = () => {
       </Modal>
     </div>
   );
-
 };
 
 export default NuevaPersona;
