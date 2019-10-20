@@ -2,11 +2,14 @@ import React, { useState } from "react";
 
 // Redux
 import { crearNuevaPersonaAction } from "./../actions/personasAction";
-import { validarFormularioAction } from "./../actions/validacionAction";
-import { useDispatch } from "react-redux";
+import {
+  validarFormularioAction,
+  validacionExito,
+  validacionError
+} from "./../actions/validacionAction";
+import { useDispatch, useSelector } from "react-redux";
 
 // Reactstrap
-//reactstrap
 import {
   Button,
   Modal,
@@ -22,7 +25,7 @@ import {
 
 import InputMask from "react-input-mask";
 
-const NuevaPersona = () => {
+const NuevaPersona = ({ history }) => {
   //State
   const [nombres, guardarNombres] = useState("");
   const [apellidos, guardarApellidos] = useState("");
@@ -42,6 +45,11 @@ const NuevaPersona = () => {
   const dispatch = useDispatch();
   const agregarPersona = persona => dispatch(crearNuevaPersonaAction(persona));
   const validarFormulario = () => dispatch(validarFormularioAction());
+  const exitoValidacion = () => dispatch(validacionExito());
+  const errorValidacion = () => dispatch(validacionError());
+
+  // Obtener los datos del state
+  const error = useSelector(state => state.error.error);
 
   // Agregar nueva Persona
   const submitNuevaPersona = e => {
@@ -61,20 +69,27 @@ const NuevaPersona = () => {
       telefono.trim() === "" ||
       correoElectronico.trim() === ""
     ) {
+      errorValidacion();
       return;
     }
-      // si pasa la validacion
-      agregarPersona({
-        nombres,
-        apellidos,
-        sexo,
-        fechaNacimiento,
-        dui,
-        nit,
-        direccion,
-        telefono,
-        correoElectronico
-      });
+
+    // si pasa la validacion
+    exitoValidacion();
+    // Crear el Nuevo producto
+    agregarPersona({
+      nombres,
+      apellidos,
+      sexo,
+      fechaNacimiento,
+      dui,
+      nit,
+      direccion,
+      telefono,
+      correoElectronico
+    });
+
+    // redireccionar
+    // history.push('/')
   };
 
   return (
@@ -265,20 +280,23 @@ const NuevaPersona = () => {
             </FormGroup>
           </ModalBody>
           <ModalFooter>
-            {/* <Button color="primary" onClick={toggle}>
-              Agregar
-            </Button> */}
-            <input
+            <Button
               type="submit"
-              className="btn btn-primary btn-md"
-              value="Agregar"
+              color="primary"
               onClick={toggle}
-            />{" "}
+            >
+              Agregar
+            </Button>{" "}
             <Button color="secondary" onClick={toggle}>
               Cancelar
             </Button>
           </ModalFooter>
         </Form>
+        {error ? (
+          <div className="font-weight-bold alert alert-danger text-center mt-4">
+            Todos los campos son obligatorios
+          </div>
+        ) : null}
       </Modal>
     </div>
   );
