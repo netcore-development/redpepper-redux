@@ -22,7 +22,7 @@ function App() {
         <div className="container">
           <Switch>
             <Route exact path="/" component={Personas} />
-            <Route exact path="/personas/nueva" component={NuevaPersona}/>
+            {/* <Route exact path="/personas/nueva" component={NuevaPersona}/> */}
             <Route exact path="/personas/editar/:id" component={EditarPersona} />
           </Switch>
         </div>

@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import NuevaPersona from "./NuevaPersona";
+
 const Header = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary justify-context-between">
@@ -10,12 +12,9 @@ const Header = () => {
             Red Pepper
           </Link>
         </h1>
-        <Link
-          to={"/personas/nueva"}
-          className="btn btn-success d-block d-md-inline-block"
-        >
-          Agregar Persona &#43;
-        </Link>
+        {/* <Link className="btn btn-success d-block d-md-inline-block"> */}
+          <NuevaPersona />
+        {/* </Link> */}
       </div>
     </nav>
   );
