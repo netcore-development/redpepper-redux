@@ -9,7 +9,7 @@ import store from "./store";
 
 // Componentes
 import Personas from './components/Personas';
-import NuevaPersona from './components/NuevaPersona';
+// import NuevaPersona from './components/NuevaPersona';
 import EditarPersona from './components/EditarPersona';
 import Header from "./components/Header";
 
