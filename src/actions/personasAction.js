@@ -52,7 +52,7 @@ export function obtenerPersonasAction() {
         dispatch(obtenerPersonasComienzo());
         
         // Consultar la API
-        clienteAxios.get('/personasd')
+        clienteAxios.get('/personas')
             .then(respuesta => {
                 // console.log(respuesta.data);
                 dispatch(descargaPersonasExitosa(respuesta.data));
