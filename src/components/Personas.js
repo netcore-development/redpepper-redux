@@ -4,6 +4,16 @@ import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { obtenerPersonasAction } from "../actions/personasAction";
 
+// For icons
+import { FaUserEdit, FaTimes } from "react-icons/fa";
+
+// For moment JS
+import moment from "moment";
+import localization from "moment/locale/es";
+
+// Setting spanish as global local for moment js
+moment.updateLocale("es", localization);
+
 const Personas = () => {
   // Mandar a llamar la action principal para retornar los productos
   const dispatch = useDispatch();

@@ -17,7 +17,7 @@ export function crearNuevaPersonaAction(persona) {
 
         // insertar en la API
         clienteAxios.post('personas', persona).then(respuesta => {
-            console.log(respuesta);
+            // console.log(respuesta);
             // Si se inserta correctamente
             dispatch(agregarPersonaExito(persona));
             
@@ -52,12 +52,13 @@ export function obtenerPersonasAction() {
         dispatch(obtenerPersonasComienzo());
         
         // Consultar la API
-        clienteAxios.get('/personas')
+        clienteAxios.get('/personasd')
             .then(respuesta => {
                 // console.log(respuesta.data);
                 dispatch(descargaPersonasExitosa(respuesta.data));
             }).catch(error => {
-                console.log(error);
+                // console.log(error);
+                dispatch(descargaPersonasError())
             })
     }
 }
@@ -69,4 +70,8 @@ export const obtenerPersonasComienzo = () => ({
 export const descargaPersonasExitosa = (personas) => ({
     type: DESCARGA_PERSONAS_EXITOSA,
     payload: personas
+})
+
+export const descargaPersonasError = () => ({
+    type: DESCARGA_PERSONAS_ERROR
 })
