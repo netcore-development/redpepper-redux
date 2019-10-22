@@ -1,6 +1,22 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
+
+// Redux
+import { useDispatch, useSelector } from "react-redux";
+import { obtenerProductosAction } from "../actions/personasAction";
 
 const Personas = () => {
+  // Mandar a llamar la action principal para retornar los productos
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+    // Productos cuando el componente este listo
+    const cargarProductos = () => dispatch(obtenerProductosAction());
+    cargarProductos();
+  });
+
+  // Acceder al state
+  const loading = useSelector((state) => state.personas.loading);
+
   return (
     <Fragment>
       <div id="contenedorClientes" className="container">
@@ -11,7 +27,7 @@ const Personas = () => {
               <br />
               <table
                 id="personasDT"
-                className="table table-striped table-bordered"
+                className="table table-striped table-bordered table-responsive"
                 // style={{ width: "100%" }}
               >
                 <thead>
@@ -36,6 +52,7 @@ const Personas = () => {
                   </tr>
                 </tfoot>
               </table>
+              
             </div>
             {/* .card */}
           </div>
@@ -44,6 +61,7 @@ const Personas = () => {
         {/* .row */}
       </div>
       {/*  .container */}
+      {loading ? 'Cargando...' : null}
     </Fragment>
   );
 };

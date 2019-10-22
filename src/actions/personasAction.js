@@ -1,7 +1,10 @@
 import {
   AGREGAR_PERSONA,
   AGREGAR_PERSONA_EXITO,
-  AGREGAR_PERSONA_ERROR
+  AGREGAR_PERSONA_ERROR,
+  COMENZAR_DESCARGA_PRODUCTOS,
+  DESCARGA_PRODUCTOS_EXITOSA,
+  DESCARGA_PRODUCTOS_ERROR
 } from "../types";
 
 // axios
@@ -41,4 +44,16 @@ export const agregarPersonaExito = (persona) => ({
 export const agregarProductoError = error => ({
     type: AGREGAR_PERSONA_ERROR,
     payload: error
+})
+
+// Obtener Listado de Personas (Consultar API)
+export function obtenerProductosAction() {
+    return(dispatch) => {
+        dispatch(obtenerProductosComienzo());
+        
+    }
+}
+
+export const obtenerProductosComienzo = () => ({
+    type: COMENZAR_DESCARGA_PRODUCTOS
 })
