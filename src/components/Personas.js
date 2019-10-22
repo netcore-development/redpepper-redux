@@ -2,7 +2,7 @@ import React, { Fragment, useEffect } from "react";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
-import { obtenerProductosAction } from "../actions/personasAction";
+import { obtenerPersonasAction } from "../actions/personasAction";
 
 const Personas = () => {
   // Mandar a llamar la action principal para retornar los productos
@@ -10,9 +10,9 @@ const Personas = () => {
 
   useEffect(()=>{
     // Productos cuando el componente este listo
-    const cargarProductos = () => dispatch(obtenerProductosAction());
-    cargarProductos();
-  });
+    const cargarPersonas = () => dispatch(obtenerPersonasAction());
+    cargarPersonas();
+  }, []);
 
   // Acceder al state
   const loading = useSelector((state) => state.personas.loading);

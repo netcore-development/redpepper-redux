@@ -2,9 +2,9 @@ import {
   AGREGAR_PERSONA,
   AGREGAR_PERSONA_EXITO,
   AGREGAR_PERSONA_ERROR,
-  COMENZAR_DESCARGA_PRODUCTOS,
-  DESCARGA_PRODUCTOS_EXITOSA,
-  DESCARGA_PRODUCTOS_ERROR
+  COMENZAR_DESCARGA_PERSONAS,
+  DESCARGA_PERSONAS_EXITOSA,
+  DESCARGA_PERSONAS_ERROR
 } from "../types";
 
 // axios
@@ -47,13 +47,26 @@ export const agregarProductoError = error => ({
 })
 
 // Obtener Listado de Personas (Consultar API)
-export function obtenerProductosAction() {
+export function obtenerPersonasAction() {
     return(dispatch) => {
-        dispatch(obtenerProductosComienzo());
+        dispatch(obtenerPersonasComienzo());
         
+        // Consultar la API
+        clienteAxios.get('/personas')
+            .then(respuesta => {
+                // console.log(respuesta.data);
+                dispatch(descargaPersonasExitosa(respuesta.data));
+            }).catch(error => {
+                console.log(error);
+            })
     }
 }
 
-export const obtenerProductosComienzo = () => ({
-    type: COMENZAR_DESCARGA_PRODUCTOS
+export const obtenerPersonasComienzo = () => ({
+    type: COMENZAR_DESCARGA_PERSONAS
+})
+
+export const descargaPersonasExitosa = (personas) => ({
+    type: DESCARGA_PERSONAS_EXITOSA,
+    payload: personas
 })

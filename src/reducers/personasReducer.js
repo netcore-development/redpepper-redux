@@ -2,9 +2,9 @@ import {
   AGREGAR_PERSONA,
   AGREGAR_PERSONA_EXITO,
   AGREGAR_PERSONA_ERROR,
-  COMENZAR_DESCARGA_PRODUCTOS,
-  DESCARGA_PRODUCTOS_EXITOSA,
-  DESCARGA_PRODUCTOS_ERROR
+  COMENZAR_DESCARGA_PERSONAS,
+  DESCARGA_PERSONAS_EXITOSA,
+  DESCARGA_PERSONAS_ERROR
 } from "../types";
 
 // creando su propio state
@@ -32,22 +32,22 @@ export default function(state = initialState, action) {
         ...state,
         error: action.payload
       };
-    case COMENZAR_DESCARGA_PRODUCTOS:
+    case COMENZAR_DESCARGA_PERSONAS:
       return {
         ...state,
         loading: true
       };
-    case DESCARGA_PRODUCTOS_EXITOSA:
+    case DESCARGA_PERSONAS_EXITOSA:
       return {
         ...state,
-        productos: action.payload,
+        personas: action.payload,
         loading: false,
         error: false
       };
-    case DESCARGA_PRODUCTOS_ERROR:
+    case DESCARGA_PERSONAS_ERROR:
       return {
         ...state,
-        productos: [],
+        personas: [],
         error: true,
         loading: false
       };
