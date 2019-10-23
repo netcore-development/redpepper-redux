@@ -17,11 +17,12 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 
 // Componentes
-import EditarPersona from "./EditarPersona";
+import { obtenerPersonaEditarAction } from "./../actions/personasAction";
 
 // For moment JS
 import moment from "moment";
 import localization from "moment/locale/es";
+import EditarPersona from "./EditarPersona";
 
 // Setting spanish as global local for moment js
 moment.updateLocale("es", localization);
@@ -105,9 +106,22 @@ const Personas = () => {
 
   // Btn Modificar
 
+  // const [modal, setModal] = useState(false);
+  // const toggle = () => setModal(!modal);
+
   const btnModificar = (cell, row) => {
-    return <EditarPersona id={row.id} />;
+    const personaSeleccionada = () => {
+      dispatch(obtenerPersonaEditarAction(row.id));
+    };
+    return (
+      <EditarPersona
+        id={row.id}
+        personaSeleccionada={personaSeleccionada}
+      />
+    );
   };
+
+  // Acceder al state
 
   // Btn Eliminar
   const btnEliminar = (cell, row) => {
@@ -196,8 +210,6 @@ const Personas = () => {
         dispatch(borrarPersonaAction(id));
       }
     });
-
-    // Confirmacion de Sweet Alert
   };
 
   // . Para DataTable

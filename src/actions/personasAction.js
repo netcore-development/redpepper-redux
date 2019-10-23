@@ -14,130 +14,134 @@ import {
 } from "../types";
 
 // axios
-import clienteAxios from './../config/axios';
+import clienteAxios from "./../config/axios";
 
 // añadir una nueva persona - Funcion Principal
 export function crearNuevaPersonaAction(persona) {
-    return (dispatch) => {
-        dispatch(nuevaPersona());
+  return dispatch => {
+    dispatch(nuevaPersona());
 
-        // insertar en la API
-        clienteAxios.post('personas', persona).then(respuesta => {
-            // console.log(respuesta);
-            // Si se inserta correctamente
-            dispatch(agregarPersonaExito(persona));
-            
-        })
-        .catch(error => {
-            console.log(error);
+    // insertar en la API
+    clienteAxios
+      .post("personas", persona)
+      .then(respuesta => {
+        // console.log(respuesta);
+        // Si se inserta correctamente
+        dispatch(agregarPersonaExito(persona));
+        // recargar el state
+        dispatch(obtenerPersonasAction());
+      })
+      .catch(error => {
+        console.log(error);
 
-            // Si hay un error 
-            dispatch(agregarProductoError(true));
-        })
-        
-    }
+        // Si hay un error
+        dispatch(agregarProductoError(true));
+      });
+  };
 }
 
 export const nuevaPersona = () => ({
-    type: AGREGAR_PERSONA
+  type: AGREGAR_PERSONA
 });
 
-export const agregarPersonaExito = (persona) => ({
-    type: AGREGAR_PERSONA_EXITO,
-    payload: persona
-})
+export const agregarPersonaExito = persona => ({
+  type: AGREGAR_PERSONA_EXITO,
+  payload: persona
+});
 
 export const agregarProductoError = error => ({
-    type: AGREGAR_PERSONA_ERROR,
-    payload: error
-})
+  type: AGREGAR_PERSONA_ERROR,
+  payload: error
+});
 
 // Obtener Listado de Personas (Consultar API)
 export function obtenerPersonasAction() {
-    return(dispatch) => {
-        dispatch(obtenerPersonasComienzo());
-        
-        // Consultar la API
-        clienteAxios.get('/personas')
-            .then(respuesta => {
-                // console.log(respuesta.data);
-                dispatch(descargaPersonasExitosa(respuesta.data));
-            }).catch(error => {
-                // console.log(error);
-                dispatch(descargaPersonasError())
-            })
-    }
+  return dispatch => {
+    dispatch(obtenerPersonasComienzo());
+
+    // Consultar la API
+    clienteAxios
+      .get("/personas")
+      .then(respuesta => {
+        // console.log(respuesta.data);
+        dispatch(descargaPersonasExitosa(respuesta.data));
+      })
+      .catch(error => {
+        // console.log(error);
+        dispatch(descargaPersonasError());
+      });
+  };
 }
 
 export const obtenerPersonasComienzo = () => ({
-    type: COMENZAR_DESCARGA_PERSONAS
-})
+  type: COMENZAR_DESCARGA_PERSONAS
+});
 
-export const descargaPersonasExitosa = (personas) => ({
-    type: DESCARGA_PERSONAS_EXITOSA,
-    payload: personas
-})
+export const descargaPersonasExitosa = personas => ({
+  type: DESCARGA_PERSONAS_EXITOSA,
+  payload: personas
+});
 
 export const descargaPersonasError = () => ({
-    type: DESCARGA_PERSONAS_ERROR
-})
+  type: DESCARGA_PERSONAS_ERROR
+});
 
 // Funcion que elimina una persona en especifico
 export function borrarPersonaAction(id) {
-    return (dispatch) => {
-        dispatch(obtenerPersonaEliminar());
-        
-        // Eliminado desde la API
-        clienteAxios.delete(`/personas/${id}`)
-            .then(respuesta => {
-                // console.log(respuesta);
-                dispatch(eliminarPersonaExito(id));
+  return dispatch => {
+    dispatch(obtenerPersonaEliminar());
 
-                
-            })
-            .catch(error => {
-                // console.log(error);
-                dispatch(eliminarPersonaError());
-                
-            })
-    }
+    // Eliminado desde la API
+    clienteAxios
+      .delete(`/personas/${id}`)
+      .then(respuesta => {
+        // console.log(respuesta);
+        dispatch(eliminarPersonaExito(id));
+      })
+      .catch(error => {
+        // console.log(error);
+        dispatch(eliminarPersonaError());
+      });
+  };
 }
 
 export const obtenerPersonaEliminar = () => ({
-    type: OBTENER_PERSONA_ELIMINAR
-})
+  type: OBTENER_PERSONA_ELIMINAR
+});
 
 export const eliminarPersonaExito = id => ({
-    type: PERSONA_ELIMINADA_EXITO,
-    payload: id
-})
+  type: PERSONA_ELIMINADA_EXITO,
+  payload: id
+});
 
 export const eliminarPersonaError = () => ({
-    type: PERSONA_ELIMINADA_ERROR
-})
+  type: PERSONA_ELIMINADA_ERROR
+});
 
 // Obtener la Persona a Editar
 export function obtenerPersonaEditarAction(id) {
-    return (dispatch) => {
-        dispatch(obtenerPersonaAction());
+  return dispatch => {
+    dispatch(obtenerPersonaAction());
 
-        // obtener producto de la api
-        clienteAxios.get(`/personas/${id}`)
-            .then(respuesta => {
-                console.log(respuesta.data);
-                dispatch(obtenerPersonaEditarExito(respuesta.data));
-            })
-            .catch(error => {
-                console.log(error);
-            })
-    }
+    // obtener persona de la api
+
+    clienteAxios
+      .get(`/personas/${id}`)
+      .then(respuesta => {
+        console.log(respuesta.data);
+        dispatch(obtenerPersonaEditarExito(respuesta.data));
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 }
 
 export const obtenerPersonaAction = () => ({
-    type: OBTENER_PERSONA_EDITAR
-})
+  type: OBTENER_PERSONA_EDITAR
+});
 
 export const obtenerPersonaEditarExito = persona => ({
-    type: PERSONA_EDITAR_EXITO,
-    payload: persona
-})
+  type: PERSONA_EDITAR_EXITO,
+  payload: persona
+});
