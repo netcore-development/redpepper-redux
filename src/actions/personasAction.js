@@ -4,7 +4,13 @@ import {
   AGREGAR_PERSONA_ERROR,
   COMENZAR_DESCARGA_PERSONAS,
   DESCARGA_PERSONAS_EXITOSA,
-  DESCARGA_PERSONAS_ERROR
+  DESCARGA_PERSONAS_ERROR,
+  OBTENER_PERSONA_ELIMINAR,
+  PERSONA_ELIMINADA_EXITO,
+  PERSONA_ELIMINADA_ERROR,
+  OBTENER_PERSONA_EDITAR,
+  PERSONA_EDITAR_EXITO,
+  PERSONA_EDITAR_ERROR
 } from "../types";
 
 // axios
@@ -74,4 +80,64 @@ export const descargaPersonasExitosa = (personas) => ({
 
 export const descargaPersonasError = () => ({
     type: DESCARGA_PERSONAS_ERROR
+})
+
+// Funcion que elimina una persona en especifico
+export function borrarPersonaAction(id) {
+    return (dispatch) => {
+        dispatch(obtenerPersonaEliminar());
+        
+        // Eliminado desde la API
+        clienteAxios.delete(`/personas/${id}`)
+            .then(respuesta => {
+                // console.log(respuesta);
+                dispatch(eliminarPersonaExito(id));
+
+                
+            })
+            .catch(error => {
+                // console.log(error);
+                dispatch(eliminarPersonaError());
+                
+            })
+    }
+}
+
+export const obtenerPersonaEliminar = () => ({
+    type: OBTENER_PERSONA_ELIMINAR
+})
+
+export const eliminarPersonaExito = id => ({
+    type: PERSONA_ELIMINADA_EXITO,
+    payload: id
+})
+
+export const eliminarPersonaError = () => ({
+    type: PERSONA_ELIMINADA_ERROR
+})
+
+// Obtener la Persona a Editar
+export function obtenerPersonaEditarAction(id) {
+    return (dispatch) => {
+        dispatch(obtenerPersonaAction());
+
+        // obtener producto de la api
+        clienteAxios.get(`/personas/${id}`)
+            .then(respuesta => {
+                console.log(respuesta.data);
+                dispatch(obtenerPersonaEditarExito(respuesta.data));
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+}
+
+export const obtenerPersonaAction = () => ({
+    type: OBTENER_PERSONA_EDITAR
+})
+
+export const obtenerPersonaEditarExito = persona => ({
+    type: PERSONA_EDITAR_EXITO,
+    payload: persona
 })

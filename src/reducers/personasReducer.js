@@ -4,7 +4,13 @@ import {
   AGREGAR_PERSONA_ERROR,
   COMENZAR_DESCARGA_PERSONAS,
   DESCARGA_PERSONAS_EXITOSA,
-  DESCARGA_PERSONAS_ERROR
+  DESCARGA_PERSONAS_ERROR,
+  OBTENER_PERSONA_ELIMINAR,
+  PERSONA_ELIMINADA_EXITO,
+  PERSONA_ELIMINADA_ERROR,
+  OBTENER_PERSONA_EDITAR,
+  PERSONA_EDITAR_EXITO,
+  PERSONA_EDITAR_ERROR
 } from "../types";
 
 // creando su propio state
@@ -50,6 +56,40 @@ export default function(state = initialState, action) {
         personas: [],
         error: true,
         loading: false
+      };
+    case OBTENER_PERSONA_ELIMINAR:
+      return {
+        ...state,
+        error: null
+      };
+    case PERSONA_ELIMINADA_EXITO:
+      return {
+        ...state,
+        error: null,
+        personas: state.personas.filter(
+          persona => persona.id !== action.payload
+        )
+      };
+    case PERSONA_ELIMINADA_ERROR:
+      return {
+        ...state,
+        error: true
+      };
+    case OBTENER_PERSONA_EDITAR:
+      return {
+        ...state,
+        error: null
+      };
+    case PERSONA_EDITAR_EXITO:
+      return {
+        ...state,
+        error: null,
+        persona: action.payload
+      };
+    case PERSONA_EDITAR_ERROR:
+      return {
+        ...state,
+        error: true
       };
     default:
       return state;
