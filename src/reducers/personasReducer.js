@@ -10,14 +10,18 @@ import {
   PERSONA_ELIMINADA_ERROR,
   OBTENER_PERSONA_EDITAR,
   PERSONA_EDITAR_EXITO,
-  PERSONA_EDITAR_ERROR
+  PERSONA_EDITAR_ERROR,
+  COMENZAR_EDICION_PERSONA,
+  PERSONA_EDITADA_EXITO,
+  PERSONA_EDITADA_ERROR
 } from "../types";
 
 // creando su propio state
 const initialState = {
   personas: [],
   error: null,
-  loading: false
+  loading: false,
+  persona: {}
 };
 
 export default function(state = initialState, action) {
@@ -41,21 +45,24 @@ export default function(state = initialState, action) {
     case COMENZAR_DESCARGA_PERSONAS:
       return {
         ...state,
-        loading: true
+        loading: true,
+        persona: {}
       };
     case DESCARGA_PERSONAS_EXITOSA:
       return {
         ...state,
         personas: action.payload,
         loading: false,
-        error: false
+        error: false,
+        persona: {}
       };
     case DESCARGA_PERSONAS_ERROR:
       return {
         ...state,
         personas: [],
         error: true,
-        loading: false
+        loading: false,
+        persona: {}
       };
     case OBTENER_PERSONA_ELIMINAR:
       return {
@@ -91,6 +98,22 @@ export default function(state = initialState, action) {
         ...state,
         error: true
       };
+    case COMENZAR_EDICION_PERSONA:
+      return {
+        ...state,
+        error: null
+      };
+      case PERSONA_EDITADA_EXITO:
+        return{
+          ...state,
+          error: null,
+          personas: state.personas.map(persona  => persona.id === action.payload.id ? persona = action.payload : persona)
+        };
+      case PERSONA_EDITADA_ERROR:
+        return{
+          ...state,
+          error: true
+        };
     default:
       return state;
   }

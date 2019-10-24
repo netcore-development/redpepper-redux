@@ -10,8 +10,13 @@ import {
   PERSONA_ELIMINADA_ERROR,
   OBTENER_PERSONA_EDITAR,
   PERSONA_EDITAR_EXITO,
-  PERSONA_EDITAR_ERROR
+  PERSONA_EDITAR_ERROR,
+  COMENZAR_EDICION_PERSONA,
+  PERSONA_EDITADA_EXITO,
+  PERSONA_EDITADA_ERROR
 } from "../types";
+
+import Swal from "sweetalert2";
 
 // axios
 import clienteAxios from "./../config/axios";
@@ -28,6 +33,11 @@ export function crearNuevaPersonaAction(persona) {
         // console.log(respuesta);
         // Si se inserta correctamente
         dispatch(agregarPersonaExito(persona));
+        Swal.fire(
+          "Almacenado",
+          "La persona se añadió correctamente",
+          "success"
+        );
         // recargar el state
         dispatch(obtenerPersonasAction());
       })
@@ -133,6 +143,7 @@ export function obtenerPersonaEditarAction(id) {
       })
       .catch(error => {
         console.log(error);
+        dispatch(obtenerPersonaEditarError());
       });
   };
 }
@@ -144,4 +155,47 @@ export const obtenerPersonaAction = () => ({
 export const obtenerPersonaEditarExito = persona => ({
   type: PERSONA_EDITAR_EXITO,
   payload: persona
+});
+
+export const obtenerPersonaEditarError = () => ({
+  type: PERSONA_EDITAR_ERROR
+});
+
+/**  Modifica una persona en la API y state */
+export function editarPersonaAction(persona) {
+  return dispatch => {
+    dispatch(comenzarEdicionPersona());
+
+    // Consultar la API
+    clienteAxios
+      .put(`/personas/${persona.id}`, persona)
+      .then(respuesta => {
+        // console.log(respuesta);
+        dispatch(editarPersonaExito(respuesta.data));
+        Swal.fire(
+          "Almacenado",
+          "La persona se actualizó correctamente",
+          "success"
+        );
+
+        dispatch(obtenerPersonasAction());
+      })
+      .catch(error => {
+        // console.log(error);
+        dispatch(editarPersonaError());
+      });
+  };
+}
+
+export const comenzarEdicionPersona = () => ({
+  type: COMENZAR_EDICION_PERSONA
+});
+
+export const editarPersonaExito = persona => ({
+  type: PERSONA_EDITADA_EXITO,
+  payload: persona
+});
+
+export const editarPersonaError = () => ({
+  type: PERSONA_EDITADA_ERROR
 });

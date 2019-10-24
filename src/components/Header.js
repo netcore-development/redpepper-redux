@@ -9,7 +9,7 @@ const Header = () => {
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark justify-context-between">
       <div className="container">
         <h1>
-          <Link to={"/"} className="text-light">
+          <Link to={"/"} className="text-light" style={{textDecoration: 'none'}}>
             Red Pepper
           </Link>
         </h1>

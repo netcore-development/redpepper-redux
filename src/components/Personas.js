@@ -11,13 +11,13 @@ import { borrarPersonaAction } from "../actions/personasAction";
 // React-table
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import BootstrapTable from "react-bootstrap-table-next";
-import { FaTimes } from "react-icons/fa";
+import { FaTimes, FaUserEdit } from "react-icons/fa";
 import { Button } from "reactstrap";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 
-// Componentes
-import { obtenerPersonaEditarAction } from "./../actions/personasAction";
+// React-router-DOM
+import { Link } from "react-router-dom";
 
 // For moment JS
 import moment from "moment";
@@ -105,37 +105,64 @@ const Personas = () => {
   };
 
   // Btn Modificar
-
-  // const [modal, setModal] = useState(false);
-  // const toggle = () => setModal(!modal);
+  const triggerEditarPersona = () => {
+    return <EditarPersona/>
+  }
 
   const btnModificar = (cell, row) => {
-    const personaSeleccionada = () => {
-      dispatch(obtenerPersonaEditarAction(row.id));
-    };
     return (
-      <EditarPersona
-        id={row.id}
-        personaSeleccionada={personaSeleccionada}
-      />
+      <Link to={`/personas/editar/${row.id}`} className="btn btn-info">
+        <FaUserEdit size="15" />
+      </Link>
     );
   };
 
-  // Acceder al state
-
   // Btn Eliminar
+  
+  // Preguntar al usuario
+  const confirmarEliminarPersona = id => {
+    Swal.fire({
+      title: "¿Estás seguro/a?",
+      text: "Una persona eliminada no se puede recuperar",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, eliminar!",
+      cancelButtonText: "Cancelar"
+    }).then(result => {
+      if (result.value) {
+        Swal.fire(
+          "Eliminado!",
+          "El registro se eliminó correctamente.",
+          "success"
+        );
+        console.log(id);
+        dispatch(borrarPersonaAction(id));
+      }
+    });
+  };
+  
   const btnEliminar = (cell, row) => {
     return (
-      <Button color="danger" onClick={() => confirmarEliminarProducto(row.id)}>
+      <Button color="danger" onClick={() => confirmarEliminarPersona(row.id)}>
         <FaTimes size="15" />
       </Button>
     );
   };
 
+  // Datatable
+  
+  const defaultSorted = [{
+    dataField: "id", // if dataField is not match to any column you defined, it will be ignored.
+    order: "asc" // desc or asc
+  }];
+
   const columns = [
     {
       dataField: "id",
-      text: "ID"
+      text: "ID",
+      sort: true
     },
     {
       dataField: "nombres",
@@ -188,29 +215,7 @@ const Personas = () => {
 
   const { SearchBar } = Search;
 
-  // Preguntar al usuario
-  const confirmarEliminarProducto = id => {
-    Swal.fire({
-      title: "¿Estás seguro/a?",
-      text: "Una persona eliminada no se puede recuperar",
-      type: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Sí, eliminar!",
-      cancelButtonText: "Cancelar"
-    }).then(result => {
-      if (result.value) {
-        Swal.fire(
-          "Eliminado!",
-          "El registro se eliminó correctamente.",
-          "success"
-        );
-        console.log(id);
-        dispatch(borrarPersonaAction(id));
-      }
-    });
-  };
+  
 
   // . Para DataTable
 
@@ -256,6 +261,7 @@ const Personas = () => {
                         condensed
                         noDataIndication="No hay registros disponibles"
                         pagination={paginationFactory(options)}
+                        defaultSorted={defaultSorted}
                       />
                     </div>
                   )}

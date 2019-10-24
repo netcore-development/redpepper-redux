@@ -23,9 +23,11 @@ import {
   Col
 } from "reactstrap";
 
+import { Redirect } from "react-router-dom";
+
 import InputMask from "react-input-mask";
 
-const NuevaPersona = ({ history }) => {
+const NuevaPersona = () => {
   //State
   const [nombres, guardarNombres] = useState("");
   const [apellidos, guardarApellidos] = useState("");
@@ -75,7 +77,8 @@ const NuevaPersona = ({ history }) => {
 
     // si pasa la validacion
     exitoValidacion();
-    // Crear el Nuevo producto
+
+    // Crear Nueva Persona
     agregarPersona({
       nombres,
       apellidos,
@@ -88,6 +91,20 @@ const NuevaPersona = ({ history }) => {
       correoElectronico
     });
 
+    if (exitoValidacion()) {
+      setModal(false);
+      guardarNombres("");
+      guardarApellidos("");
+      guardarSexo("");
+      guardarFechaNacimiento("");
+      guardarDui("");
+      guardarNit("");
+      guardarDireccion("");
+      guardarTelefono("");
+      guardarCorreoElectronico("");
+    }
+
+    
     // redireccionar
     // history.push('/')
   };
@@ -280,11 +297,7 @@ const NuevaPersona = ({ history }) => {
             </FormGroup>
           </ModalBody>
           <ModalFooter>
-            <Button
-              type="submit"
-              color="primary"
-              onClick={toggle}
-            >
+            <Button type="submit" color="primary">
               Agregar
             </Button>{" "}
             <Button color="secondary" onClick={toggle}>
